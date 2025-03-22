@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grupo 6 - Ciencias de Datos y Aprendizaje Automático</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos generales */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f8f4; /* Fondo gris claro para mantener profesionalidad */
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Encabezado */
+        header {
+            background-color: #198754; /* Verde característico */
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil para elegancia */
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin: 0;
+        }
+
+        header p {
+            font-size: 1.4em;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        /* Contenido principal */
+        .contenido {
+            flex: 1;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .titulo {
+            color: #198754; /* Verde claro */
+            font-weight: bold;
+            font-size: 2.8em;
+            margin-bottom: 30px;
+        }
+
+        .subtitulo {
+            color: #8CC63F; /* Verde más claro */
+            font-weight: bold;
+            font-size: 1.7em;
+            margin-bottom: 25px;
+        }
+
+        .descripcion {
+            color: #444;
+            font-size: 1.2em;
+            line-height: 1.8;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        /* Estilo de los integrantes */
+        .integrantes {
+            display: flex;
+            justify-content: space-evenly; /* Para distribuir las tarjetas de manera uniforme */
+            gap: 20px; /* Reducir el espacio entre las tarjetas */
+            margin-top: 30px; /* Reducir el margen superior */
+            flex-wrap: wrap; /* Para que se adapten mejor en pantallas pequeñas */
+        }
+
+        .integrante {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 250px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .integrante h3 {
+            font-size: 1.5em;
+            color: #198754;
+        }
+
+        .integrante p {
+            font-size: 1.1em;
+            color: #555;
+            margin-top: 15px;
+        }
+
+        .integrante:hover {
+            transform: translateY(-10px); /* Sutil efecto al pasar el mouse */
+        }
+
+        /* Imagen de los integrantes */
+        .integrante img {
+            width: 100px; /* Tamaño de la foto */
+            height: 100px; /* Tamaño de la foto */
+            border-radius: 50%; /* Hacer la foto circular */
+            object-fit: cover; /* Asegura que la imagen se ajuste bien */
+            margin-bottom: 20px; /* Espacio debajo de la imagen */
+        }
+
+        /* Estilos del footer */
+        footer {
+            background-color: #343a40; /* Gris oscuro */
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 50px;
+        }
+
+        footer a {
+            color: #8CC63F; /* Verde claro */
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            color: #198754; /* Verde más oscuro */
+        }
+
+        /* Responsividad */
+        @media screen and (max-width: 768px) {
+            .integrantes {
+                flex-direction: column;
+                align-items: center;
+            }
+            .integrante {
+                width: 80%;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Encabezado -->
+    <header>
+        <h1>Maestría en Ciencias de Datos y Maquinas de Aprendizaje</h1>
+        <p>Universidad Técnica de Manabí - Posgrado</p>
+    </header>
+
+    <!-- Contenido principal -->
+    <div class="contenido">
+        <h2 class="titulo">Presentación del Grupo 6</h2>
+        <p class="descripcion">
+            Somos un equipo multidisciplinario de estudiantes de la Maestría en Ciencias de Datos y Aprendizaje Automático de la Universidad Técnica de Manabí. Nuestro enfoque está en la resolución de problemas complejos mediante el uso de técnicas avanzadas de machine learning y análisis de datos.
+        </p>
+
+        <h3 class="subtitulo">Nuestros Integrantes</h3>
+        
+        <div class="integrantes">
+            <div class="integrante">
+                <img src="teams/1.jpeg" alt="Foto de Nexar Lucas">
+                <h3>Ing. Nexar Lucas</h3>
+                <p>Especialista en procesamiento de datos y desarrollo de modelos predictivos utilizando técnicas de machine learning.</p>
+            </div>
+
+            <div class="integrante">
+                <img src="teams/2.png" alt="Foto de Jordi Delgado">
+                <h3>Ing. Jordi Delgado</h3>
+                <p>Encargado de la implementación de soluciones en inteligencia artificial y análisis de grandes volúmenes de datos.</p>
+            </div>
+
+            <div class="integrante">
+                <img src="teams/3.jpeg" alt="Foto de Gustavo Cevallos">
+                <h3>Ing. Gustavo Cevallos</h3>
+                <p>Responsable de la integración de sistemas y de la visualización de datos con herramientas avanzadas para toma de decisiones.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

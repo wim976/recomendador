@@ -1,0 +1,134 @@
+/* Estilos generales */
+body {
+    background-color: #e9f7e2; /* Color de fondo claro (verde azulado suave) */
+    font-family: 'Roboto', sans-serif; /* Tipografía limpia y moderna */
+    padding-bottom: 30px; /* Espacio extra en la parte inferior para el footer */
+}
+
+/* Títulos */
+.titulo {
+    color: #198754; /* Verde relacionado con el cultivo */
+    font-weight: bold; /* Negrita para mayor énfasis */
+    font-size: 2.5em; /* Tamaño grande para el título principal */
+    text-align: center; /* Centrado del título */
+    margin-bottom: 20px; /* Separación inferior */
+}
+
+.subtitulo {
+    color: #8CC63F; /* Verde claro para el subtítulo */
+    font-weight: bold; /* Negrita para destacar */
+    font-size: 1.5em; /* Tamaño mediano */
+    margin-bottom: 15px; /* Separación inferior */
+    text-align: center; /* Centrado del subtítulo */
+}
+
+/* Estilos para los inputs */
+input, textarea {
+    font-size: 1em; /* Tamaño de texto cómodo para lectura */
+    color: #212529; /* Color oscuro para buena visibilidad */
+}
+
+/* Estilos para los placeholders */
+input::placeholder, textarea::placeholder {
+    color: #a0a0a0; /* Gris suave para los placeholders */
+    opacity: 1; /* Asegura que la opacidad sea 100% */
+}
+
+/* Formulario más compacto */
+.formulario {
+    max-width: 400px; /* Más angosto */
+    margin: auto; /* Centrado */
+}
+
+/* Estilos para las tarjetas */
+.sombra {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    background: white;
+    padding: 20px;
+    /* Eliminar la animación */
+}
+
+/* Botón estilizado (Evaluar Modelo) */
+.btn-estilizado {
+    font-size: 1em; /* Ajustado al mismo tamaño de fuente que el botón Cerrar */
+    font-weight: bold;
+    padding: 8px 16px; /* Igualando el padding al del botón Cerrar */
+    border-radius: 8px;
+    background-color: #198754; /* Verde para el fondo del botón */
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+}
+
+/* Efecto hover para el botón Evaluar Modelo */
+.btn-estilizado:hover {
+    background-color: #155d27; /* Verde más oscuro para el hover */
+    transform: scale(1.05); /* Efecto de ampliación suave */
+}
+
+/* Efecto active para el botón Evaluar Modelo */
+.btn-estilizado:active {
+    background-color: #1b4d38; /* Verde aún más oscuro cuando se hace clic */
+    transform: scale(1.1); /* Aumenta un poco más el tamaño cuando se presiona */
+}
+
+/* Estilos para el botón Cerrar en el modal */
+.btn-secondary {
+    background-color: #6c757d; /* Gris suave */
+    border-color: #6c757d; /* Borde gris */
+    color: white; /* Texto blanco */
+    font-weight: bold; /* Negrita */
+    border-radius: 8px; /* Bordes redondeados */
+    padding: 8px 16px; /* Espaciado cómodo */
+    transition: all 0.2s ease-in-out;
+}
+
+/* Efecto hover para el botón Cerrar */
+.btn-secondary:hover {
+    background-color: #5a6268; /* Gris más oscuro al pasar el ratón */
+    border-color: #5a6268; /* Borde gris más oscuro */
+    transform: scale(1.05); /* Efecto de ampliación */
+}
+
+/* Agregar bordes o separadores entre secciones dentro del modal */
+.modal-body .row {
+    border-bottom: 1px solid #ddd; /* Separador gris entre las dos secciones */
+    padding-bottom: 20px;
+}
+
+.modal-body .row .col-md-6 {
+    padding-right: 15px; /* Espaciado entre columnas */
+}
+
+/* Estilos generales del body */
+body {
+    margin: 0; /* Eliminar márgenes por defecto */
+    min-height: 100vh; /* Asegura que el body ocupe toda la altura de la ventana */
+    display: flex;
+    flex-direction: column; /* Hace que los elementos estén en columna */
+}
+
+/* Estilos del footer */
+footer {
+    color: #333; /* Color de texto oscuro */
+    text-align: center; /* Centrado del texto */
+    font-size: 1em; /* Tamaño de fuente normal */
+    padding: 10px 0; /* Espaciado suave */
+    width: 100%; /* Asegura que ocupe todo el ancho */
+    box-sizing: border-box; /* Asegura que el padding no afecte al tamaño total */
+    margin-top: auto; /* Empuja el footer al final */
+    margin-bottom: 30px; /* Le da un pequeño margen en la parte inferior */
+}
+
+/* Estilos del enlace en el footer */
+footer a {
+    color: #198754; /* Verde claro para los enlaces */
+    text-decoration: none; /* Elimina el subrayado */
+}
+
+footer a:hover {
+    color: #155d27; /* Verde más oscuro cuando se pasa el ratón */
+}
+

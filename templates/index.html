@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recomendación de Cultivos</title>
+
+    <!-- Agregar Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Enlace al archivo CSS personalizado -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+
+    <script>
+        async function recomendarCultivo() {
+            try {
+                const data = {
+                    N: parseFloat(document.getElementById('N').value),
+                    P: parseFloat(document.getElementById('P').value),
+                    K: parseFloat(document.getElementById('K').value),
+                    temperature: parseFloat(document.getElementById('temperature').value),
+                    humidity: parseFloat(document.getElementById('humidity').value),
+                    ph: parseFloat(document.getElementById('ph').value),
+                    rainfall: parseFloat(document.getElementById('rainfall').value)
+                };
+
+                const response = await fetch('http://127.0.0.1:5000/recomendar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                document.getElementById('resultadoTexto').innerHTML = `<strong>Cultivo recomendado:</strong> ${result.cultivo_recomendado} 🌱`;
+                new bootstrap.Modal(document.getElementById('modalResultado')).show(); // Mostrar modal
+            } catch (error) {
+                document.getElementById('resultadoTexto').innerText = "Error al obtener la recomendación.";
+                console.error(error);
+            }
+        }
+
+        async function evaluarModelo() {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/evaluar_modelo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ modelo: 'modelo_entrenado' })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+
+        // Añadir un subtítulo "Evaluación" encima de los resultados
+        document.getElementById('evaluacionTexto').innerHTML = `
+            <strong>Evaluación</strong><br>
+            MAE: ${result.mae}<br>
+            MSE: ${result.mse}<br>
+            RMSE: ${result.rmse}
+        `;
+
+        // Mostrar la sección de evaluación con animación
+        const evaluacionSection = document.getElementById('evaluacionSection');
+        evaluacionSection.style.maxHeight = evaluacionSection.scrollHeight + 'px'; // Despliegue con altura
+        evaluacionSection.style.opacity = '1'; // Hacer visible
+
+        // Verificar si el enlace ya está agregado
+        const leyendaLinkExistente = document.getElementById('mostrarLeyenda');
+        if (!leyendaLinkExistente) {
+            // Agregar el enlace "¿Qué significa?" después de generar el reporte de evaluación
+            const leyendaLink = `
+                <p><a href="#" id="mostrarLeyenda" style="color: #007bff; font-size: 0.9em;">¿Qué significa?</a></p>
+            `;
+            document.getElementById('evaluacionSection').insertAdjacentHTML('beforeend', leyendaLink);
+
+            // Manejar la visibilidad de la leyenda
+            document.getElementById('mostrarLeyenda').addEventListener('click', function(event) {
+                event.preventDefault();  // Evitar que el enlace recargue la página
+                
+                // Ocultar el enlace una vez que se haga clic
+                this.style.display = 'none';
+                
+                // Mostrar u ocultar la leyenda
+                const leyenda = document.getElementById('leyenda');
+                leyenda.style.display = (leyenda.style.display === 'none' || leyenda.style.display === '') ? 'block' : 'none';
+            });
+        }
+
+    } catch (error) {
+        document.getElementById('evaluacionTexto').innerText = "Error al evaluar el modelo.";
+        console.error(error);
+    }
+}
+
+
+
+
+
+    </script>
+</head>
+<body>
+
+    <div class="container mt-5">
+        <h1 class="text-center titulo">Recomendador de cultivos</h1>
+
+        <div class="card p-4 sombra formulario">
+            <h2 class="mb-3 subtitulo">Ingrese la informacion del terreno</h2>
+            <form onsubmit="event.preventDefault(); recomendarCultivo();">
+                <div class="mb-2">
+                    <label for="N" class="form-label">Nitrógeno (N):</label>
+                    <input type="number" class="form-control form-control-sm" id="N" placeholder="Ingrese el valor de Nitrógeno" required>
+                </div>
+                <div class="mb-2">
+                    <label for="P" class="form-label">Fósforo (P):</label>
+                    <input type="number" class="form-control form-control-sm" id="P" placeholder="Ingrese el valor de Fósforo" required>
+                </div>
+                <div class="mb-2">
+                    <label for="K" class="form-label">Potasio (K):</label>
+                    <input type="number" class="form-control form-control-sm" id="K" placeholder="Ingrese el valor de Potasio" required>
+                </div>
+                <div class="mb-2">
+                    <label for="temperature" class="form-label">Temperatura (°C):</label>
+                    <input type="number" class="form-control form-control-sm" id="temperature" placeholder="Ingrese la temperatura" required>
+                </div>
+                <div class="mb-2">
+                    <label for="humidity" class="form-label">Humedad (%):</label>
+                    <input type="number" class="form-control form-control-sm" id="humidity" placeholder="Ingrese el valor de humedad" required>
+                </div>
+                <div class="mb-2">
+                    <label for="ph" class="form-label">pH:</label>
+                    <input type="number" class="form-control form-control-sm" id="ph" placeholder="Ingrese el valor de pH" required>
+                </div>
+                <div class="mb-3">
+                    <label for="rainfall" class="form-label">Precipitación (mm):</label>
+                    <input type="number" class="form-control form-control-sm" id="rainfall" placeholder="Ingrese la precipitación" required>
+                </div>
+
+                <button type="submit" class="btn btn-success btn-estilizado d-block mx-auto">Recomendar Cultivo</button>
+            </form>
+        </div>
+    </div>
+
+<!-- MODAL RESULTADO -->
+<div class="modal fade" id="modalResultado" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content p-3">
+            <div class="modal-header">
+                <h2 class="subtitulo mb-0">Resultados</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p id="resultadoTexto"></p>
+
+                <!-- Sección de Evaluación (Desplegable) -->
+                <div id="evaluacionSection" class="evaluacion-section">
+                    <p id="evaluacionTexto"></p>
+                </div>
+
+                <!-- Sección de leyenda oculta -->
+                <div id="leyenda" style="display: none; font-size: 0.9em; color: #555;">
+                    <p><strong>MAE (Error Absoluto Medio):</strong> Es el promedio de las diferencias entre los resultados que predice el modelo y los resultados reales. Cuanto más bajo es el MAE, mejor está funcionando el modelo.</p>
+                    <p><strong>MSE (Error Cuadrático Medio):</strong> Es el promedio de los errores cuadrados. Al igual que el MAE, un valor más bajo significa que el modelo hace predicciones más precisas.</p>
+                    <p><strong>RMSE (Raíz del Error Cuadrático Medio):</strong> Es como el MSE, pero en lugar de ser un número cuadrado, es el valor en las mismas unidades de lo que estamos midiendo (por ejemplo, temperatura o cantidad). Cuanto más bajo, mejor es el modelo.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary btn-estilizado" onclick="evaluarModelo()">Evaluar Modelo</button>
+                <button class="btn btn-secondary btn-estilizado" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>Made by <a href="grup6.html" target="_blank">Grupo 6</a></p>
+</footer>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
