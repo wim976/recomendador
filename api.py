@@ -133,6 +133,11 @@ def evaluar_modelo():
 def index():
     return render_template('index.html')  # Esto servirá el archivo index.html desde la carpeta templates
 
+# Ruta principal para servir el archivo HTML grupo6
+@app.route('/grup6')
+def grupo6():
+    return render_template('grup6.html')
+
 # Iniciar el servidor Flask
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
