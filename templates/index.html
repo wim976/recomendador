@@ -25,7 +25,7 @@
                     rainfall: parseFloat(document.getElementById('rainfall').value)
                 };
 
-                const response = await fetch('https://dashboard.render.com/recomendar', {
+                const response = await fetch('https://recomendador-0c8g.onrender.com/recomendar', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
@@ -47,7 +47,7 @@
 
         async function evaluarModelo() {
     try {
-        const response = await fetch('http://127.0.0.1:5000/evaluar_modelo', {
+        const response = await fetch('https://recomendador-0c8g.onrender.com/evaluar_modelo', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ modelo: 'modelo_entrenado' })
