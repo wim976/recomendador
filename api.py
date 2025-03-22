@@ -14,7 +14,8 @@ from flask_cors import CORS
 app = Flask(__name__)
 
 # Configuración de CORS
-CORS(app, resources={r"/recomendar": {"origins": "http://127.0.0.1:5000"}})
+CORS(app, resources={r"/recomendar": {"origins": "https://dashboard.render.com"}})
+
 
 # Cargar los datos y preprocesar
 file_path = "recursos/Crop_recommendation2esp.xls"
