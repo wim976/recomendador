@@ -13,12 +13,37 @@
 
 
     <script>
+
+function validarDatos(data) {
+    // Verificar que ningún campo sea cero o vacío
+    if (Object.values(data).some(val => val === 0 || isNaN(val))) {
+        throw new Error("Todos los valores deben ser números diferentes de cero");
+    }
+
+    // Validar rangos específicos
+    if (data.ph < 0 || data.ph > 14) {
+        throw new Error("El pH debe estar entre 0 y 14");
+    }
+
+    if (data.humidity < 0 || data.humidity > 100) {
+        throw new Error("La humedad debe estar entre 0% y 100%");
+    }
+
+    // Validar valores negativos (excepto temperatura que puede ser negativa)
+    if (data.N < 0 || data.P < 0 || data.K < 0 || data.rainfall < 0) {
+        throw new Error("Los valores de N, P, K y precipitación no pueden ser negativos");
+    }
+
+    return true;
+}
+
 async function recomendarCultivo() {
     try {
         const btn = document.querySelector('button[type="submit"]');
         btn.disabled = true;
         btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Analizando...';
 
+        // Obtener y validar datos ANTES de enviar
         const data = {
             N: parseFloat(document.getElementById('N').value),
             P: parseFloat(document.getElementById('P').value),
@@ -29,6 +54,10 @@ async function recomendarCultivo() {
             rainfall: parseFloat(document.getElementById('rainfall').value)
         };
 
+        // Validar los datos
+        validarDatos(data);
+
+        // Solo si pasa la validación, continuar con el fetch
         const response = await fetch('/recomendar', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -73,12 +102,15 @@ async function recomendarCultivo() {
 
         new bootstrap.Modal(document.getElementById('modalResultado')).show();
     } catch (error) {
+        // Mostrar error en el modal en lugar de alert
         document.getElementById('resultadoTexto').innerHTML = `
             <div class="alert alert-danger">
-                <i class="bi bi-exclamation-triangle"></i> Error: ${error.message}
+                <i class="bi bi-exclamation-triangle"></i> ${error.message}
+                <small class="d-block mt-2">Por favor corrige los valores e intenta nuevamente.</small>
             </div>
         `;
-        console.error("Error completo:", error);
+        new bootstrap.Modal(document.getElementById('modalResultado')).show();
+        console.error("Error de validación:", error.message);
     } finally {
         const btn = document.querySelector('button[type="submit"]');
         btn.disabled = false;
