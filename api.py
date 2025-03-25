@@ -45,9 +45,18 @@ cultivos_nombres = train_data['label_codificada']
 def recomendar_cultivo(entrada_usuario):
     entrada_normalizada = scaler.transform([entrada_usuario])
     similitudes = cosine_similarity(entrada_normalizada, perfiles_cultivos)
-    indice_recomendado = np.argmax(similitudes)
-    cultivo_recomendado = label_encoder.inverse_transform([cultivos_nombres.iloc[indice_recomendado]])[0]
-    return cultivo_recomendado
+    
+    # Obtener los índices de los 5 cultivos más similares
+    indices_recomendados = np.argsort(similitudes[0])[-5:][::-1]
+    
+    # Obtener los nombres de los cultivos recomendados
+    cultivos_recomendados = []
+    for indice in indices_recomendados:
+        cultivo = label_encoder.inverse_transform([cultivos_nombres.iloc[indice]])[0]
+        similitud = similitudes[0][indice]
+        cultivos_recomendados.append({"cultivo": cultivo, "similitud": float(similitud)})
+    
+    return cultivos_recomendados
 
 # Función para entrenar el modelo
 def entrenar_modelo():
@@ -104,9 +113,9 @@ def recomendar():
 
     # Cargar el modelo y hacer la recomendación
     modelo = cargar_o_entrenar_modelo()
-    cultivo_recomendado = recomendar_cultivo(entrada_usuario)
+    cultivos_recomendados = recomendar_cultivo(entrada_usuario)
 
-    return jsonify({"cultivo_recomendado": cultivo_recomendado})
+    return jsonify({"cultivos_recomendados": cultivos_recomendados})
 
 # Ruta para evaluar el modelo
 @app.route('/evaluar_modelo', methods=['POST'])

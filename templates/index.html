@@ -14,36 +14,43 @@
 
     <script>
         async function recomendarCultivo() {
-            try {
-                const data = {
-                    N: parseFloat(document.getElementById('N').value),
-                    P: parseFloat(document.getElementById('P').value),
-                    K: parseFloat(document.getElementById('K').value),
-                    temperature: parseFloat(document.getElementById('temperature').value),
-                    humidity: parseFloat(document.getElementById('humidity').value),
-                    ph: parseFloat(document.getElementById('ph').value),
-                    rainfall: parseFloat(document.getElementById('rainfall').value)
-                };
+    try {
+        const data = {
+            N: parseFloat(document.getElementById('N').value),
+            P: parseFloat(document.getElementById('P').value),
+            K: parseFloat(document.getElementById('K').value),
+            temperature: parseFloat(document.getElementById('temperature').value),
+            humidity: parseFloat(document.getElementById('humidity').value),
+            ph: parseFloat(document.getElementById('ph').value),
+            rainfall: parseFloat(document.getElementById('rainfall').value)
+        };
 
-                const response = await fetch('https://recomendador-0c8g.onrender.com/recomendar', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-});
+        const response = await fetch('https://recomendador-0c8g.onrender.com/recomendar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
 
-
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.statusText}`);
-                }
-
-                const result = await response.json();
-                document.getElementById('resultadoTexto').innerHTML = `<strong>Cultivo recomendado:</strong> ${result.cultivo_recomendado} 🌱`;
-                new bootstrap.Modal(document.getElementById('modalResultado')).show(); // Mostrar modal
-            } catch (error) {
-                document.getElementById('resultadoTexto').innerText = "Error al obtener la recomendación.";
-                console.error(error);
-            }
+        if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
         }
+
+        const result = await response.json();
+        
+        // Crear lista HTML con los cultivos recomendados
+        let htmlResultado = '<strong>Cultivos recomendados:</strong><ol>';
+        result.cultivos_recomendados.forEach(item => {
+            htmlResultado += `<li>${item.cultivo} (Similitud: ${item.similitud.toFixed(2)})</li>`;
+        });
+        htmlResultado += '</ol>';
+        
+        document.getElementById('resultadoTexto').innerHTML = htmlResultado;
+        new bootstrap.Modal(document.getElementById('modalResultado')).show();
+    } catch (error) {
+        document.getElementById('resultadoTexto').innerText = "Error al obtener la recomendación.";
+        console.error(error);
+    }
+}
 
         async function evaluarModelo() {
     try {
