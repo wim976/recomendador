@@ -42,21 +42,26 @@ perfiles_cultivos = caracteristicas_train_normalizadas
 cultivos_nombres = train_data['label_codificada']
 
 # Función para recomendar cultivo
+# Función para recomendar cultivo (versión mejorada sin duplicados)
 def recomendar_cultivo(entrada_usuario):
     entrada_normalizada = scaler.transform([entrada_usuario])
     similitudes = cosine_similarity(entrada_normalizada, perfiles_cultivos)
     
-    # Obtener los índices de los 5 cultivos más similares
-    indices_recomendados = np.argsort(similitudes[0])[-5:][::-1]
-    
-    # Obtener los nombres de los cultivos recomendados
-    cultivos_recomendados = []
-    for indice in indices_recomendados:
+    # Diccionario para evitar duplicados (cultivo: máxima similitud encontrada)
+    cultivos_unicos = {}
+    for indice, similitud in enumerate(similitudes[0]):
         cultivo = label_encoder.inverse_transform([cultivos_nombres.iloc[indice]])[0]
-        similitud = similitudes[0][indice]
-        cultivos_recomendados.append({"cultivo": cultivo, "similitud": float(similitud)})
+        if cultivo not in cultivos_unicos or similitud > cultivos_unicos[cultivo]:
+            cultivos_unicos[cultivo] = similitud
     
-    return cultivos_recomendados
+    # Ordenar por similitud (mayor a menor) y seleccionar top 5
+    top_cultivos = sorted(cultivos_unicos.items(), 
+                         key=lambda item: item[1], 
+                         reverse=True)[:5]
+    
+    # Formatear resultado
+    return [{"cultivo": cultivo, "similitud": float(similitud)} 
+            for cultivo, similitud in top_cultivos]
 
 # Función para entrenar el modelo
 def entrenar_modelo():

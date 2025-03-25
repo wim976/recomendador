@@ -13,8 +13,14 @@
 
 
     <script>
-        async function recomendarCultivo() {
+async function recomendarCultivo() {
     try {
+        // Mostrar estado de carga
+        const btn = document.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Procesando...';
+
+        // Obtener datos del formulario
         const data = {
             N: parseFloat(document.getElementById('N').value),
             P: parseFloat(document.getElementById('P').value),
@@ -25,30 +31,54 @@
             rainfall: parseFloat(document.getElementById('rainfall').value)
         };
 
-        const response = await fetch('https://recomendador-0c8g.onrender.com/recomendar', {
+        // Enviar solicitud al backend
+        const response = await fetch('/recomendar', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
 
-        if (!response.ok) {
-            throw new Error(`Error: ${response.statusText}`);
-        }
+        if (!response.ok) throw new Error(`Error: ${response.statusText}`);
 
         const result = await response.json();
         
-        // Crear lista HTML con los cultivos recomendados
-        let htmlResultado = '<strong>Cultivos recomendados:</strong><ol>';
-        result.cultivos_recomendados.forEach(item => {
-            htmlResultado += `<li>${item.cultivo} (Similitud: ${item.similitud.toFixed(2)})</li>`;
-        });
-        htmlResultado += '</ol>';
+        // Generar HTML con los resultados (¡5 cultivos únicos!)
+        let htmlResultado = `
+            <div class="mb-3">
+                <h4 class="text-success">Top 5 recomendaciones:</h4>
+                <ol class="list-group list-group-numbered">
+        `;
         
+        result.cultivos_recomendados.forEach((item, index) => {
+            const porcentaje = Math.round(item.similitud * 100);
+            htmlResultado += `
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <strong>${item.cultivo}</strong>
+                    </div>
+                    <span class="badge bg-primary rounded-pill">${porcentaje}%</span>
+                </li>
+            `;
+        });
+
+        htmlResultado += `</ol></div>`;
+        
+        // Mostrar resultados en el modal
         document.getElementById('resultadoTexto').innerHTML = htmlResultado;
         new bootstrap.Modal(document.getElementById('modalResultado')).show();
+
     } catch (error) {
-        document.getElementById('resultadoTexto').innerText = "Error al obtener la recomendación.";
-        console.error(error);
+        document.getElementById('resultadoTexto').innerHTML = `
+            <div class="alert alert-danger">
+                Error: ${error.message}
+            </div>
+        `;
+        console.error("Error completo:", error);
+    } finally {
+        // Restaurar botón
+        const btn = document.querySelector('button[type="submit"]');
+        btn.disabled = false;
+        btn.textContent = 'Recomendar Cultivo';
     }
 }
 
