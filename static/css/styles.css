@@ -132,3 +132,43 @@ footer a:hover {
     color: #155d27; /* Verde más oscuro cuando se pasa el ratón */
 }
 
+
+
+@keyframes fadeInUp {
+    from { 
+        opacity: 0; 
+        transform: translateY(15px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+.cultivo-item {
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    background: #f8f9fa;
+    border-left: 4px solid #28a745;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.progress-bar-animated {
+    transition: width 1s ease-in-out;
+}
+
+.badge-porcentaje {
+    font-size: 0.85rem;
+    padding: 5px 10px;
+    border-radius: 20px;
+}
+
+/* Estilo para el texto de compatibilidad */
+.compatibilidad-text {
+    font-size: 0.8rem;
+    color: #6c757d;
+    font-style: italic;
+}

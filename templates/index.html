@@ -15,12 +15,10 @@
     <script>
 async function recomendarCultivo() {
     try {
-        // Mostrar estado de carga
         const btn = document.querySelector('button[type="submit"]');
         btn.disabled = true;
-        btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Procesando...';
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Analizando...';
 
-        // Obtener datos del formulario
         const data = {
             N: parseFloat(document.getElementById('N').value),
             P: parseFloat(document.getElementById('P').value),
@@ -31,7 +29,6 @@ async function recomendarCultivo() {
             rainfall: parseFloat(document.getElementById('rainfall').value)
         };
 
-        // Enviar solicitud al backend
         const response = await fetch('/recomendar', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -42,44 +39,59 @@ async function recomendarCultivo() {
 
         const result = await response.json();
         
-        // Generar HTML con los resultados (¡5 cultivos únicos!)
-        let htmlResultado = `
-            <div class="mb-3">
-                <h4 class="text-success">Top 5 recomendaciones:</h4>
-                <ol class="list-group list-group-numbered">
+        const resultadoTexto = document.getElementById('resultadoTexto');
+        resultadoTexto.innerHTML = `
+            <h4 class="text-success mb-3">🌻 En base a tu terreno, recomendamos:</h4>
+            <div id="cultivos-container"></div>
         `;
+
+        const container = document.getElementById('cultivos-container');
         
         result.cultivos_recomendados.forEach((item, index) => {
-            const porcentaje = Math.round(item.similitud * 100);
-            htmlResultado += `
-                <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <div class="ms-2 me-auto">
-                        <strong>${item.cultivo}</strong>
+            setTimeout(() => {
+                const porcentaje = Math.round(item.similitud * 100);
+                const cultivoElement = document.createElement('div');
+                cultivoElement.className = 'cultivo-item';
+                cultivoElement.style.animationDelay = `${index * 0.3}s`;
+                cultivoElement.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="mb-0 text-dark">${item.cultivo}</h5>
+                        <span class="badge badge-porcentaje bg-primary">${porcentaje}%</span>
                     </div>
-                    <span class="badge bg-primary rounded-pill">${porcentaje}%</span>
-                </li>
-            `;
+                    <div class="progress mb-2" style="height: 8px;">
+                        <div class="progress-bar progress-bar-animated bg-success" style="width: 0"></div>
+                    </div>
+                    <span class="compatibilidad-text">${getNivelCompatibilidad(porcentaje)}</span>
+                `;
+                container.appendChild(cultivoElement);
+
+                setTimeout(() => {
+                    cultivoElement.querySelector('.progress-bar').style.width = `${porcentaje}%`;
+                }, 100);
+            }, index * 300);
         });
 
-        htmlResultado += `</ol></div>`;
-        
-        // Mostrar resultados en el modal
-        document.getElementById('resultadoTexto').innerHTML = htmlResultado;
         new bootstrap.Modal(document.getElementById('modalResultado')).show();
-
     } catch (error) {
         document.getElementById('resultadoTexto').innerHTML = `
             <div class="alert alert-danger">
-                Error: ${error.message}
+                <i class="bi bi-exclamation-triangle"></i> Error: ${error.message}
             </div>
         `;
         console.error("Error completo:", error);
     } finally {
-        // Restaurar botón
         const btn = document.querySelector('button[type="submit"]');
         btn.disabled = false;
         btn.textContent = 'Recomendar Cultivo';
     }
+}
+
+// Función auxiliar (agrégala junto a la función principal)
+function getNivelCompatibilidad(porcentaje) {
+    if (porcentaje >= 90) return "★ ★ ★ ★ ★ - Excelente adaptación";
+    if (porcentaje >= 75) return "★ ★ ★ ★ ☆ - Buena adaptación";
+    if (porcentaje >= 60) return "★ ★ ★ ☆ ☆ - Adaptación moderada";
+    return "★ ★ ☆ ☆ ☆ - Adaptación básica";
 }
 
         async function evaluarModelo() {
